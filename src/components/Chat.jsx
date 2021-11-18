@@ -1,15 +1,13 @@
-import SignOut from "./SignOut";
+import { useEffect, useState } from "react";
+import { Avatar, Button, Container, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Box from "@mui/system/Box";
 import { deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { colRef, db, auth } from "../firebase";
-import { useEffect, useState } from "react";
+import SignOut from "./SignOut";
 import SendMessage from "./SendMessage";
-import { Avatar, Button, Container, Typography } from "@mui/material";
-import Box from "@mui/system/Box";
-import DeleteIcon from "@mui/icons-material/Delete";
 const Chat = () => {
-   const { uid, photoURL } = auth.currentUser;
    const [messages, setMessages] = useState([]);
-
    useEffect(() => {
       onSnapshot(colRef, (snapshot) => {
          setMessages(
@@ -26,21 +24,44 @@ const Chat = () => {
    };
    return (
       <Box mt={5}>
-         <Container maxWidth="sm" sx={{ border: "2px solid black" }}>
+         <Container
+            maxWidth="sm"
+            sx={{ border: "2px dashed #2ffece", padding: "10px" }}
+         >
             <SignOut />
-            <Box mt={3} >
+            <Box
+               mt={3}
+               sx={{
+                  wordBreak: "break-all",
+               }}
+            >
                {messages.map((msg, idx) => (
-                  <Box mt={2} key={idx}>
-                     <Avatar alt={msg.photoURL} src={msg.photoURL} />
-                     <Typography variant="h6">{msg.text}</Typography>
-                     <DeleteIcon
-                        sx={{ cursor: "pointer" }}
-                        color="action"
-                        onClick={() => {
-                           deleteDocHandler(idx);
-                        }}
-                     />
-                  </Box>
+                  <div
+                     className={`${
+                        msg.uid == auth.currentUser.uid ? "send" : "recieve"
+                     }`}
+                  >
+                     <Box mt={2} key={idx}>
+                        <Button
+                           endIcon={
+                              <Avatar alt={msg.photoURL} src={msg.photoURL} />
+                           }
+                           startIcon={
+                              <DeleteIcon
+                                 color="secondary"
+                                 sx={{ cursor: "pointer" }}
+                                 color="action"
+                                 onClick={() => {
+                                    deleteDocHandler(idx);
+                                 }}
+                              />
+                           }
+                           disableRipple
+                        >
+                           <Typography variant="p">{msg.text}</Typography>
+                        </Button>
+                     </Box>
+                  </div>
                ))}
                <SendMessage />
             </Box>

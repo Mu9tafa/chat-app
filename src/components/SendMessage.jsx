@@ -22,18 +22,20 @@ const SendMessage = () => {
       e.target.reset();
    };
    return (
-      <Box mt={5}>
+      <Box mt={5} textAlign="center">
          <form onSubmit={submitHandler}>
             <FormControl>
-               <TextField
-                  type="text"
-                  label="Enter msg"
-                  size="small"
-                  onChange={changeHandler}
-               ></TextField>
-               <Button variant="contained" type="submit">
-                  Send
-               </Button>
+               <div className="msg">
+                  <TextField
+                     type="text"
+                     label="Enter msg"
+                     size="small"
+                     onChange={changeHandler}
+                  ></TextField>
+                  <Button variant="contained" type="submit">
+                     Send
+                  </Button>
+               </div>
             </FormControl>
          </form>
       </Box>
